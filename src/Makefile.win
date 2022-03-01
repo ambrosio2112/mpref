@@ -1,0 +1,20 @@
+FC=C:\Rtools\mingw_64\bin\gfortran
+CC=C:\Rtools\mingw_64\bin\gcc
+
+FCFLAGS = -O3 -c 
+CCFLAGS = -O3 -c -I C:/Program\ Files/R/R-3.5.1/include
+FLFLAGS = -shared -L C:/Program\ Files/R/R-3.5.1/bin/x64 -lR -lRlapack -lRblas
+
+all: mpref.dll
+
+rsubstims.o: rsubstims.c
+	$(CC) $(CCFLAGS) $^
+
+preferencia.o: preferencia.f90
+	$(FC) $(FCFLAGS) $^
+
+mprefR.o: mprefR.f90
+	$(FC) $(FCFLAGS) $^
+
+mpref.dll: rsubstims.o preferencia.o mprefR.o
+	$(FC) $(FLFLAGS) -o $@ $^ librandomlib.a $(LDFLAGS)
